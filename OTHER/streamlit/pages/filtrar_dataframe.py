@@ -7,19 +7,9 @@ from pandas.api.types import (
     is_object_dtype,
 )
 
-st.title("Auto Filter Dataframes in Streamlit")
-
-st.write(
-    """This app accomodates the blog [here](https://blog.streamlit.io/auto-generate-a-dataframe-filtering-ui-in-streamlit-with-filter_dataframe/)
-    and walks you through one example of how the Streamlit
-    Data Science Team builds add-on functions to Streamlit.
-    """
-)
-
-
 def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Adds a UI on top of a dataframe to let viewers filter columns
+    Adds a UI on top of a dataframe to let viewers filter columns.
 
     Args:
         df (pd.DataFrame): Original dataframe
@@ -54,39 +44,27 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
             left.write("↳")
             # Treat columns with < 10 unique values as categorical
             if isinstance(df[column].dtype, pd.api.types.CategoricalDtype) or df[column].nunique() < 10:
-                if is_numeric_dtype(df[column].dtype):
-                    values = sorted(df[column].unique())
-                else:
-                    values = df[column].unique()
-
                 user_cat_input = right.multiselect(
                     f"Values for {column}",
                     df[column].unique(),
-                    default=list(values),
                 )
-                df = df[df[column].isin(user_cat_input)]
+                if user_cat_input:
+                    df = df[df[column].isin(user_cat_input)]
             elif is_numeric_dtype(df[column]):
-                _min = float(df[column].min())
-                _max = float(df[column].max())
-                step = (_max - _min) / 100
-                user_num_input = right.slider(
-                    f"Values for {column}",
-                    _min,
-                    _max,
-                    (_min, _max),
-                    step=step,
+                user_num_input = right.number_input(
+                    f"Value for {column}",
+                    min_value=float(df[column].min()),
+                    max_value=float(df[column].max()),
+                    value=None,
                 )
-                df = df[df[column].between(*user_num_input)]
+                if user_num_input is not None:
+                    df = df[df[column] == user_num_input]
             elif is_datetime64_any_dtype(df[column]):
                 user_date_input = right.date_input(
                     f"Values for {column}",
-                    value=(
-                        df[column].min(),
-                        df[column].max(),
-                    ),
+                    value=None,
                 )
-                if len(user_date_input) == 2:
-                    user_date_input = tuple(map(pd.to_datetime, user_date_input))
+                if user_date_input:
                     start_date, end_date = user_date_input
                     df = df.loc[df[column].between(start_date, end_date)]
             else:
@@ -98,8 +76,15 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
     return df
 
+def mostrar():
+    st.title("Auto Filter Dataframes in Streamlit")
 
-df = pd.read_csv("dados_finais.csv")
+    st.write(
+        """This app accommodates the blog [here](https://blog.streamlit.io/auto-generate-a-dataframe-filtering-ui-in-streamlit-with-filter_dataframe/)
+        and walks you through one example of how the Streamlit
+        Data Science Team builds add-on functions to Streamlit.
+        """
+    )
 
-#"https://raw.githubusercontent.com/mcnakhaee/palmerpenguins/master/palmerpenguins/data/penguins.csv"
-st.dataframe(filter_dataframe(df))
+    df = pd.read_csv("dados_finais.csv")
+    st.dataframe(filter_dataframe(df))
