@@ -21,20 +21,20 @@ def plotar_grafico_inde(serie_temporal, anos, id_aluno):
     plt.legend()
     st.pyplot(plt)
 
-def mostrar():
-    st.title('Previsão do INDE para Alunos')
 
-    id_aluno = st.text_input('Insira o ID do aluno:', '')
+st.title('Previsão do INDE para Alunos')
 
-    if id_aluno:
-        try:
-            id_aluno_int = int(id_aluno)
-            serie_temporal, anos = obter_dados_e_previsao(id_aluno_int)
-            if serie_temporal is not None:
-                st.subheader(f'O INDE previsto para o aluno {id_aluno_int} é:')
-                st.markdown("##")
-                plotar_grafico_inde(serie_temporal, anos, id_aluno_int)
-            else:
-                st.write('ID do aluno não encontrado.')
-        except ValueError:
-            st.write('Por favor, insira um ID válido.')
+id_aluno = st.text_input('Insira o ID do aluno:', '')
+
+if id_aluno:
+    try:
+        id_aluno_int = int(id_aluno)
+        serie_temporal, anos = obter_dados_e_previsao(id_aluno_int)
+        if serie_temporal is not None:
+            st.subheader(f'O INDE previsto para o aluno {id_aluno_int} é:')
+            st.markdown("##")
+            plotar_grafico_inde(serie_temporal, anos, id_aluno_int)
+        else:
+            st.write('ID do aluno não encontrado.')
+    except ValueError:
+        st.write('Por favor, insira um ID válido.')

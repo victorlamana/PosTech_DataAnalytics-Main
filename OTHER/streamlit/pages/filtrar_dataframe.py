@@ -76,15 +76,15 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
     return df
 
-def mostrar():
-    st.title("Auto Filter Dataframes in Streamlit")
 
-    st.write(
-        """This app accommodates the blog [here](https://blog.streamlit.io/auto-generate-a-dataframe-filtering-ui-in-streamlit-with-filter_dataframe/)
-        and walks you through one example of how the Streamlit
-        Data Science Team builds add-on functions to Streamlit.
-        """
-    )
+st.title("Auto Filter Dataframes in Streamlit")
 
-    df = pd.read_csv("dados_finais.csv")
-    st.dataframe(filter_dataframe(df))
+st.write(
+    """This app accommodates the blog [here](https://blog.streamlit.io/auto-generate-a-dataframe-filtering-ui-in-streamlit-with-filter_dataframe/)
+    and walks you through one example of how the Streamlit
+    Data Science Team builds add-on functions to Streamlit.
+    """
+)
+
+df = pd.read_csv("dados_finais.csv")
+st.dataframe(filter_dataframe(df))
