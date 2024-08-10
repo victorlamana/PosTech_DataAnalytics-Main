@@ -8,9 +8,7 @@ st.title("Embedded Notebook")
 # Path to your HTML file
 html_file_path = 'DATATHON_PREPARACAO.html'
 
-# Read the HTML file
-with open(html_file_path, 'r') as f:
-    html_content = f.read()
-
-# Display the HTML content in Streamlit
-components.html(html_content, height=800)
+# Display the HTML content in an iframe
+st.markdown(f"""
+    <iframe src="{html_file_path}" style="width:100%; height:1200px; border:none;"></iframe>
+""", unsafe_allow_html=True)
